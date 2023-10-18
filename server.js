@@ -4,12 +4,11 @@ const path = require("path")
 const ejs = require("ejs");
 const expressLayout = require("express-ejs-layouts")
 const webRoute = require("./routes/web")
-// app.use(expressLayout)
-app.use("/",webRoute)
+app.use(expressLayout)
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, './resources/views'))
 app.use(express.static('public'))
-
+app.use("/",webRoute)
 // app.get('/', (req,res)=>{
 //     res.render("home")
 // })
