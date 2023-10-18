@@ -8,6 +8,7 @@ const webRoute = require("./routes/web")
 app.use("/",webRoute)
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, './resources/views'))
+app.use(express.static('public'))
 
 // app.get('/', (req,res)=>{
 //     res.render("home")
