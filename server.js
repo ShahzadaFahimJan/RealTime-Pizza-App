@@ -7,22 +7,35 @@ const expressLayout = require("express-ejs-layouts")
 const webRoute = require("./routes/web")
 const session = require("express-session")
 const flash = require("express-flash")
-
+const MongoDbStore = require("connect-mongo")
+const mongoose = require("mongoose")
 //database connection 
- require('./db/conn')
+ const dbconnection=require('./db/conn')
+//
 
-
+const store = MongoDbStore.create({
+    mongoUrl: 'mongodb://localhost/pizza',
+    crypto: {
+      secret: 'squirrel'
+    }
+  })
 
 //middleware session 
 app.use(session({
     secret: 'secretkey',
-    resave: false,
+    resave: false, 
+    store: store,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+    cookie: { maxAge: 1000 * 60 * 60 *24 }
 }));
-
+//global middleware 
+app.use((req,res,next)=>{
+  res.locals.session = req.session;
+  next();
+  })
 app.use(flash());
 app.use(expressLayout)
+app.use(express.json())
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, './resources/views'))
 app.use(express.static('public'))
@@ -32,6 +45,13 @@ app.use("/",webRoute)
 //     res.render("home")
 // })
 
+
+
+
+
+
+
+// ... (rest of your code)
 
 
 const PORT = process.env.PORT || 8000;

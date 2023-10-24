@@ -7,7 +7,8 @@ const cartController = require('../app/http/controller/customers/cartController'
 //     res.render("home")
 // })
 router.get('/',homeController().index)
-router.get("/cart",cartController().cart)
+router.get('/cart',cartController().cart)
 router.get('/login',authController().login)
 router.get('/register',authController().register)
+router.post('/update-card',cartController().update)
 module.exports = router;

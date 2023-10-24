@@ -1,4 +1,6 @@
 @import './variables';
+@import '~noty/src/noty.scss';
+@import '~noty/src/themes/mint.scss';
  body{
     font-family: 'Lato',sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -55,4 +57,8 @@
       }
    }
    
+ }
+ .noty_theme__mint{
+   border-radius:  50px!important;
+   padding-left: 8px!important;
  }
