@@ -78,6 +78,7 @@ const flash = require("express-flash");
 const MongoDbStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const Emmiter = require('events')
 
 // Database connection
 const dbconnection = require('./db/conn');
@@ -93,7 +94,9 @@ const store = MongoDbStore.create({
         secret: 'squirrel'
     }
 });
-
+//event emmiter 
+const eventEmitter = new Emmiter()
+app.set('eventEmitter',eventEmitter)
 app.use(session({
     secret: 'secretkey',
     resave: false,
@@ -127,6 +130,28 @@ app.use("/", webRoute);
 // ... (rest of your code)
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`);
 });
+const io = require('socket.io')(server)
+io.on('connection', (socket) => {
+      // Join
+      socket.on('join', (orderId) => {
+        console.log(orderId)
+        socket.join(orderId)
+        
+      })
+})
+
+
+eventEmitter.on('orderUpdated', (data) => {
+    console.log('Emitting orderUpdated event with data:', data);
+    io.to(`order_${data.id}`).emit('orderUpdated', data);
+});
+
+
+
+eventEmitter.on('orderPlaced', (data) => {
+    console.log('Emitting orderPlaced event with data:', data);
+    io.to('adminRoom').emit('orderPlaced', data)
+})

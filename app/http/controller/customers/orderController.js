@@ -16,25 +16,23 @@ function orderController(){
                 address
             })
             order.save().then(result =>{
+                
                 req.flash('order placed successfully')
                 delete req.session.cart;
-                return res.redirect('/')
+                const eventEmitter = req.app.get('eventEmitter');
+                eventEmitter.emit('orderPlaced',result)
 
+                return res.redirect('/')
+                
             }).catch(err=>{
                 req.flash('error','SomeThing went wrong')
                 return res.redirect('/cart')
             })
         },
-        // async index(req,res){
-        //     const orders = await Order.find({customerId: req.user._id})
-        //     res.render('customers/orders',{orders: orders})
-        //     console.log(orders)
-        // }
+        
         async index(req, res) {
             if (!req.user || !req.user._id) {
-                // handle the case where req.user is not defined or does not have _id property
-                // return an error response, redirect the user, or handle it according to your use case
-               // return res.status(401).send('Unauthorized');
+                
                 return res.redirect('/login')
             }
         
@@ -43,9 +41,19 @@ function orderController(){
                 {sort: {'createdAt': -1 }}
                 );
             res.render('customers/orders', { orders: orders,moment:moment,});
-            console.log(orders);
-        }
+          //  console.log(orders);
+        },
         
+       async show(req,res)
+        {
+           const order = await Order.findById(req.params.id)
+           if(req.user._id.toString() === order.customerId.toString()){
+           return res.render('customers/singleOrder',{order})
+           }
+           else{
+           return res.redirect('/')
+           }
+        }
     }
 }
 module.exports = orderController;

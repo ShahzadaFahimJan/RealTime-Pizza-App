@@ -8,6 +8,7 @@ const auth = require('../app/http/middlewares/auth')
 const admin = require('../app/http/middlewares/admin')
 const orderController = require('../app/http/controller/customers/orderController')
 const AdminOrderController = require('../app/http/controller/admin/orderController')
+const statusController = require('../app/http/controller/admin/statusController')
 // router.get("/",(req,res)=>{
 //     res.render("home")
 // })
@@ -22,6 +23,8 @@ router.post('/logout',authController().logout)
 //customer route
 router.post('/orders',auth,orderController().store)
 router.get('/customer/orders',auth,orderController().index)
+router.get('/customer/orders/:id',auth,orderController().show)
 //Admin 
 router.get('/admin/orders', admin ,AdminOrderController().index)
+router.post('/admin/orders/status',statusController().update)
 module.exports = router;
