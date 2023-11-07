@@ -2,6 +2,7 @@ let addToCard = document.querySelectorAll('.add-to-cart');
 import axios from 'axios';
 import Noty from "noty";
 import {initAdmin} from './admin'
+import {initStripe} from './stripe'
 let cartCounter = document.querySelector('.cartCounter')
 function updateCard(pizza){
 axios.post('/update-card',pizza).then(res =>{
@@ -79,6 +80,9 @@ function updateStatus(order) {
 }
 
 updateStatus(order);
+
+//Ajax call
+initStripe();
 
 
 let socket = io('http://localhost:8000', {

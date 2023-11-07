@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const orderSchema = new mongoose.Schema({
     customerId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'user',
         required: true,
     },
     items:{
@@ -22,6 +22,10 @@ const orderSchema = new mongoose.Schema({
     paymentType:{
         type: String,
         default: 'COD',
+    },
+    paymentStatus:{
+        type: Boolean,
+        default: false
     },
     status:{
         type: String,

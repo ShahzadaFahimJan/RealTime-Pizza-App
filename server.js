@@ -79,7 +79,7 @@ const MongoDbStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const Emmiter = require('events')
-
+const stripe = require('stripe')(process.env.stripe_secret_key);
 // Database connection
 const dbconnection = require('./db/conn');
 
